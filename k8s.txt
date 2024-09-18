@@ -1,0 +1,263 @@
+
+Git Hub URL - https://github.com/pradeepch82/kubernetes.git
+
+Rancher Desktop
+------------------------
+Docker CLI
+Docker-Compose
+Docker Engine
+K8s
+
+https://kubectl.cdctrn.k8s.sdntest.netcracker.com/commandline
+
+https://kubectl.k8s-apps.openshift.sdntest.netcracker.com/commandline
+
+kubectl config set-context cdctrn --cluster=cdctrn --namespace=cdc-k8s-training-practice
+
+kubectl config get-contexts
+
+kubectl config use-context minikube
+kubectl config use-context cdctrn
+
+
+
+kubectl config use-context rancher-desktop
+kubectl config set-context minikube --cluster=minikube --namespace=default
+
+kubectl config delete-context minikube
+kubectl config delete-context cdctrn
+
+
+kubectl get all
+
+kubectl get all -n cdc-k8s-training-practice
+
+
+
+kubectl create namespace nc-training
+kubectl config set-context rancher-desktop --cluster=rancher-desktop --namespace=nc-training
+
+
+kubectl create deployment  p-tea --image=pradeepch82/tea:1.1 --port=80 --replicas=2
+kubectl expose deployment p-tea  --name=p-cp-tea-service
+kubectl expose deployment p-tea --type=NodePort --name=p-np-tea-service
+kubectl expose deployment p-tea --type=LoadBalancer --name=p-lb-tea-service
+
+
+kubectl port-forward svc/p-cp-tea-service 2424:80
+
+kubectl port-forward svc/nc-k8-app  2424:80
+
+kubectl create deployment  p-nginx --image=nginx --port=80 --replicas=3 -n cdc-k8s-training-practice
+
+Services
+-------------
+ClusterIP -Default  ->   http:<cluster-ip>:container:port
+NodePort               ->   http:<node-ip>:<node-port>
+LoadBalancer
+
+
+http://192.168.0.156:30218
+
+http://192.168.0.211:30218
+
+
+
+
+kubectl create deployment  p-nginx1 --image=nginx --port=80 --replicas=3 -n cdc-k8s-training-practice
+
+
+kubectl expose deployment p-nginx  --name=p-np-nginx-service
+
+kubectl expose deployment p-nginx --type=NodePort --name=p-np-nginx-service
+
+
+kubectl expose deployment p-nginx --type=LoadBalancer --name=p-lb-nginx-service
+
+
+LoadBalancer ( NodePort (ClusterIP))
+
+
+kubectl create deployment  p-tead --image=pradeepch82/tea:1.1 --port=80 --replicas=3
+
+kubectl create deployment  a-jenkins --image=jenkins/jenkins --port=80 --replicas=3
+
+============================================================================Practice===========================================================================================
+Practice myself 
+https://labs.play-with-k8s.com/
+
+curl.exe -L -o ubuntu-2204.appx https://aka.ms/wslubuntu220403
+
+Add-AppxPackage .\Ubuntu2204-221101.AppxBundle
+
+wsl --unregister Ubuntu --Reinstall Linux 
+
+echo "nameserver 8.8.8.8"  | sudo tee /etc/resolv.conf
+
+nameserver 10.244.0.10
+
+
+search default.svc.cluster.local svc.cluster.local cluster.local
+nameserver 10.244.0.10
+options ndots:5
+
+ssh -i ./Key-Pair-K8s.pem ubuntu@13.233.110.246
+
+ curl -fsSL https://get.docker.com -o get-docker.sh
+ sudo sh get-docker.sh
+ 
+docker run -d -p 8000:8000 -p 9443:9443 --name portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer-ce:latest
+
+curl -fsSL https://raw.githubusercontent.com/Niru0290/K8s/main/get-k8s.sh -o k8s.sh
+ sudo sh k8s.sh
+ 
+
+ kubeadm init --apiserver-advertise-address=INSTANCE_PRIVATE_IP --pod-network-cidr=192.168.0.0/16 --ignore-preflight-errors=all
+ kubeadm init --apiserver-advertise-address=192.168.0.8 --pod-network-cidr=10.244.0.0/24
+ kubeadm init --config kubeadm-config.yaml
+ 
+ sudo kubeadm init --control-plane-endpoint master:6443 --pod-network-cidr=192.168.0.0/16
+ To start using your cluster, you need to run the following as a regular user:
+
+
+export KUBECONFIG=/etc/kubernetes/admin.conf
+
+kubectl drain ws-15029 --delete-emptydir-data --force --ignore-daemonsets
+
+
+kubeadm init --config kubeadm-config.yaml
+
+kubeadm config print init-defaults > kubeadm-config.yaml
+
+
+kubeadm reset 
+---
+kind: KubeletConfiguration
+apiVersion: kubelet.config.k8s.io/v1beta1
+cgroupDriver: systemd
+allowSwap: true
+
+only this will solve kubelet start issue
+echo "KUBELET_EXTRA_ARGS=--fail-swap-on=false"  | sudo tee /etc/default/kubelet
+echo 1 | sudo tee /proc/sys/net/ipv4/ip_forward
+
+kubectl taint nodes --all  node-role.kubernetes.io/control-plane-
+systemctl list-unit-files --type=service
+======================================For dashboard=======================================================
+Install Helm
+
+curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 > get_helm.sh
+chmod 700 get_helm.sh
+export VERIFY_CHECKSUM=false
+./get_helm.sh
+
+
+# Add kubernetes-dashboard repository
+helm repo add kubernetes-dashboard https://kubernetes.github.io/dashboard/
+# Deploy a Helm Release named "kubernetes-dashboard" using the kubernetes-dashboard chart
+helm upgrade --install kubernetes-dashboard kubernetes-dashboard/kubernetes-dashboard --create-namespace --namespace kubernetes-dashboard
+
+
+
+Congratulations! You have just installed Kubernetes Dashboard in your cluster.
+
+To access Dashboard run:
+  kubectl -n kubernetes-dashboard port-forward svc/kubernetes-dashboard-kong-proxy 8443:443
+
+NOTE: In case port-forward command does not work, make sure that kong service name is correct.
+      Check the services in Kubernetes Dashboard namespace using:
+        kubectl -n kubernetes-dashboard get svc
+
+
+helm delete kubernetes-dashboard --namespace kubernetes-dashboard
+
+helm delete -n portainer portainer portainer/portainer --set tls.force=true
+
+
+========================================================================================
+kubectl get nodes
+kubectl get nodes -o wide
+kubectl get pods -A -o wide
+kubectl get svc -A -o wide
+kubectl get all -A
+kubectl config view
+kubectl config get-contexts
+kubectl cluster-info
+
+kubectl describe pod kube-flannel-ds-kqvr5 -n kube-flannel
+kubectl describe pod coredns-76f75df574-9hswp  -n kube-system
+kubectl describe pod kubernetes-dashboard-api-7bdd6cf76c-72jtw -n kubernetes-dashboard
+
+
+kubectl describe svc kubernetes -n default
+
+kubectl describe deployment.apps/coredns -n kube-system
+
+kubectl describe cm coredns -n kube-system
+
+kubectl logs kube-flannel-ds-snwzq  -n kube-flannel
+
+kubectl logs coredns-76f75df574-9hswp  -n kube-system
+
+kubectl logs kubernetes-dashboard-api-6797cc9db7-k6kf5  -n kubernetes-dashboard
+
+kubectl delete replicaset.apps/coredns-76f75df574  -n kube-system
+
+
+kubectl exec -it coredns-76f75df574-9vlj7  -n kube-system --bash
+
+kubectl exec -it nginx /bin/bash
+
+
+kubectl get endpoints kube-dns --namespace=kube-system
+
+kubectl config get-contexts
+kubectl config set-context kubernetes-admin@kubernetes --cluster=kubernetes --namespace=niru-kubernetes
+
+
+kubectl apply -n portainer -f https://downloads.portainer.io/ce2-19/portainer.yaml
+
+kubectl delete -n portainer -f https://downloads.portainer.io/ce2-19/portainer.yaml
+
+
+kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/bc79dd1505b0c8681ece4de4c0d86c5cd2643275/Documentation/kube-flannel.yml
+
+
+kubectl drain node2 --delete-local-data --force --ignore-daemonsets
+
+
+
+
+
+kubectl delete deployment coredns -n kube-system
+NC cloud 
+
+https://bass.netcracker.com/display/NCInsights/Cloud+Platform 
+
+Please also check the learning paths:
+1. https://bass.netcracker.com/display/NCInsights/Cloud+Essentials
+2. https://bass.netcracker.com/display/NCInsights/Kubernetes
+3. https://bass.netcracker.com/display/NCInsights/Docker
+4. https://bass.netcracker.com/display/NCInsights/Microservice+Development
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
